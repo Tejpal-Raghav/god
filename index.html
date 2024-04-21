@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Legal Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .download-btn {
+      background-color: #008CBA;
+    }
+    .download-btn:hover {
+      background-color: #0078A7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Legal Assistant</h1>
+    <label for="query">Enter your legal-related question:</label>
+    <input type="text" id="query" name="query" placeholder="Type your question here...">
+    <button onclick="getLegalDocument()">Generate Legal Document</button>
+    <textarea id="legalDocument" readonly></textarea>
+    <button class="download-btn" onclick="downloadLegalDocument()">Download Legal Document</button>
+  </div>
+
+  <script>
+    async function getLegalDocument() {
+      var query = document.getElementById("query").value;
+      const response = await fetch('/generate-legal-document/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_query: query
+        })
+      });
+      const data = await response.json();
+      document.getElementById("legalDocument").value = data.legal_document;
+    }
+
+    function downloadLegalDocument() {
+      var legalDocumentText = document.getElementById("legalDocument").value;
+      var blob = new Blob([legalDocumentText], { type: "text/plain;charset=utf-8" });
+      saveAs(blob, "legal_document.txt");
+    }
+  </script>
+</body>
+</html>
